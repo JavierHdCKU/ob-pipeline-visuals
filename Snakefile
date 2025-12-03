@@ -2,17 +2,18 @@ rule flow_metric_plots:
     input:
         metrics = "in/{dataset}.flow_metrics.json.gz"
     output:
-        done = "out/{stage}/{module}/{params}/{dataset}_plots.done"
+        done = "out/{dataset}_plots.done"
     params:
-        root = "in/",
-        outdir = "out/{stage}/{module}/{params}/{dataset}_plots"
+        root = "in/"
+        outdir = "out/plots"
+        envpython = "$(which python)"
     conda:
         "plot_env.yml"
     shell:
         """
         mkdir -p {params.outdir}
 
-        python visualize_flow_metrics.py \
+        {params.envpython} visualize_flow_metrics.py \
             --root {params.root} \
             --outdir {params.outdir}
 
